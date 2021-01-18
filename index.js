@@ -29,7 +29,7 @@ const DIR = "build";
     });
 
     await saveMeta({ page, directory: DIR });
-    await saveWaypoints({ page, directory: DIR });
+    await saveWaypoints({ page, directory: DIR, trip });
     await saveScreenshots({ page, directory: `${DIR}/screenshots` });
 
     await browser.close();

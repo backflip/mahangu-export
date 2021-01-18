@@ -13,6 +13,7 @@
   "dependencies": {
     "del": "^6.0.0",
     "minimist": "^1.2.5",
-    "puppeteer": "^5.5.0"
+    "puppeteer": "^5.5.0",
+    "xml2js": "^0.4.23"
   }
 }

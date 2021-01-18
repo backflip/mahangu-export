@@ -6,6 +6,7 @@ const minimist = require("minimist");
 const { saveMeta } = require("./lib/meta");
 const { saveWaypoints } = require("./lib/waypoints");
 const { saveScreenshots } = require("./lib/screenshots");
+const { savePhotos } = require("./lib/photos");
 
 const { trip, debug } = minimist(process.argv.slice(2));
 
@@ -38,8 +39,16 @@ const DIR = "build";
       waitUntil: "networkidle2",
     });
 
+    // Meta data
     await saveMeta({ page, directory: DIR });
-    await saveWaypoints({ page, directory: DIR, trip });
+
+    // Waypoints
+    const waypoints = await saveWaypoints({ page, directory: DIR });
+
+    // Photos
+    await savePhotos({ directory: `${DIR}/photos`, waypoints, trip, debug });
+
+    // Screenshots of specific UI elements
     await saveScreenshots({ page, directory: `${DIR}/screenshots` });
 
     await browser.close();

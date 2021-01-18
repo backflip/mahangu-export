@@ -12,7 +12,9 @@
   "license": "ISC",
   "dependencies": {
     "del": "^6.0.0",
+    "mime-types": "^2.1.28",
     "minimist": "^1.2.5",
+    "node-fetch": "^2.6.1",
     "puppeteer": "^5.5.0",
     "xml2js": "^0.4.23"
   }

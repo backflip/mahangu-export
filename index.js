@@ -7,15 +7,21 @@ const { saveMeta } = require("./lib/meta");
 const { saveWaypoints } = require("./lib/waypoints");
 const { saveScreenshots } = require("./lib/screenshots");
 const { savePhotos } = require("./lib/photos");
+const { saveHtml } = require("./lib/html");
 
-const { trip, debug } = minimist(process.argv.slice(2));
+const { trip, debug, clean } = minimist(process.argv.slice(2));
 
 const DIR = "build";
 
 (async function main() {
   try {
-    await del(DIR);
-    fs.mkdirSync(DIR);
+    if (clean) {
+      await del(DIR);
+    }
+
+    if (!fs.existsSync(DIR)) {
+      fs.mkdirSync(DIR);
+    }
 
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
@@ -40,18 +46,33 @@ const DIR = "build";
     });
 
     // Meta data
-    await saveMeta({ page, directory: DIR });
+    const meta = await saveMeta({ page, directory: DIR });
+    // const meta = require("./build/meta.json");
 
     // Waypoints
     const waypoints = await saveWaypoints({ page, directory: DIR });
+    // const waypoints = require("./build/waypoints.json");
 
     // Photos
-    await savePhotos({ directory: `${DIR}/photos`, waypoints, trip, debug });
+    const photos = await savePhotos({
+      directory: `${DIR}/photos`,
+      waypoints,
+      trip,
+    });
+    // const photos = require("./build/photos.json");
 
     // Screenshots of specific UI elements
-    await saveScreenshots({ page, directory: `${DIR}/screenshots` });
+    await saveScreenshots({
+      page,
+      trip,
+      waypoints,
+      directory: `${DIR}/screenshots`,
+    });
 
     await browser.close();
+
+    // Generate HTML
+    await saveHtml({ meta, waypoints, photos, directory: DIR });
   } catch (err) {
     console.error(err);
   }

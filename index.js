@@ -7,7 +7,7 @@ const { saveMeta } = require("./lib/meta");
 const { saveWaypoints } = require("./lib/waypoints");
 const { saveScreenshots } = require("./lib/screenshots");
 
-const { trip } = minimist(process.argv.slice(2));
+const { trip, debug } = minimist(process.argv.slice(2));
 
 const DIR = "build";
 
@@ -18,6 +18,16 @@ const DIR = "build";
 
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
+
+    if (debug) {
+      await page.setRequestInterception(true);
+
+      page.on("request", (request) => {
+        console.log(">>", request.method(), request.url());
+
+        request.continue();
+      });
+    }
 
     await page.setViewport({
       width: 1600 + 393, // Map width + content area

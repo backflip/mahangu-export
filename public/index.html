@@ -6,57 +6,59 @@
     <link rel="stylesheet" href="assets/styles.css" />
   </head>
   <body>
-    <h1><%= meta.title %></h1>
+    <div class="wrapper">
+      <h1><%= meta.title %></h1>
 
-    <div class="meta">
-      <img src="screenshots/card.png" alt="" class="card" />
+      <div class="meta">
+        <img src="screenshots/card.png" alt="" class="card" />
 
-      <div class="description"><%- meta.description %></div>
+        <div class="description"><%- meta.description %></div>
 
-      <ul class="users">
-        <% meta.users.forEach((user, i) => { %>
-        <li>
-          <img src="screenshots/user-<%= ( i+1 ) %>.png" alt="<%= user %>" />
-        </li>
-        <% }); %>
-      </ul>
-    </div>
-
-    <img src="screenshots/map.png" alt="" class="map" />
-
-    <div class="waypoints">
-      <% waypoints.forEach((waypoint) => { %>
-      <details>
-        <summary>
-          <h2><%= waypoint.date %> – <%= waypoint.title %></h2>
-        </summary>
-
-        <div class="text"><%- waypoint.description %></div>
-
-        <h3>Photos</h3>
-        <ul class="photos">
-          <% waypoint.photos.forEach((photo) => { %>
+        <ul class="users">
+          <% meta.users.forEach((user, i) => { %>
           <li>
-            <a href="photos/<%= photo.id %>-large.jpeg">
-              <img
-                src="photos/<%= photo.id %>-small.jpeg"
-                alt="<%= photo.description %>"
-                title="<%= photo.description %>"
-              />
-            </a>
+            <img src="screenshots/user-<%= ( i+1 ) %>.png" alt="<%= user %>" />
           </li>
           <% }); %>
         </ul>
+      </div>
 
-        <h3>Comments</h3>
-        <div class="comments">
-          <img
-            src="screenshots/comments/comments-<%= waypoint.id %>.png"
-            alt="Screenshot of Facebook comments"
-          />
-        </div>
-      </details>
-      <% }); %>
+      <img src="screenshots/map.png" alt="" class="map" />
+
+      <div class="waypoints">
+        <% waypoints.forEach((waypoint) => { %>
+        <details>
+          <summary>
+            <h2><%= waypoint.date %> – <%= waypoint.title %></h2>
+          </summary>
+
+          <div class="text"><%- waypoint.description %></div>
+
+          <h3>Photos</h3>
+          <ul class="photos">
+            <% waypoint.photos.forEach((photo) => { %>
+            <li>
+              <a href="photos/<%= photo.id %>-large.jpeg">
+                <img
+                  src="photos/<%= photo.id %>-small.jpeg"
+                  alt="<%= photo.description %>"
+                  title="<%= photo.description %>"
+                />
+              </a>
+            </li>
+            <% }); %>
+          </ul>
+
+          <h3>Comments</h3>
+          <div class="comments">
+            <img
+              src="screenshots/comments/comments-<%= waypoint.id %>.png"
+              alt="Screenshot of Facebook comments"
+            />
+          </div>
+        </details>
+        <% }); %>
+      </div>
     </div>
   </body>
 </html>

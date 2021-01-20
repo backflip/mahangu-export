@@ -1,0 +1,113 @@
+@font-face {
+  font-family: "Museo Sans";
+  src: url("font.woff2") format("woff2"), url("font.woff") format("woff");
+}
+
+body {
+  font-family: sans-serif;
+  margin: 2rem;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Museo Sans";
+  font-weight: 500;
+}
+
+.meta {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.card {
+  flex-shrink: 0;
+  margin: 0 2rem 2rem -0.25rem;
+}
+.description {
+  flex: 1;
+  min-width: 20rem;
+}
+.users {
+  list-style: none;
+  padding: 0;
+  margin-left: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.map {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 2rem 0;
+}
+
+details {
+  border-top: 1px solid black;
+}
+summary {
+  padding: 1rem 0;
+  list-style: none;
+  position: relative;
+  padding-left: 2rem;
+}
+summary::-webkit-details-marker {
+  display: none;
+}
+summary::before {
+  content: "▸";
+  position: absolute;
+  top: 0.75rem;
+  left: 0;
+  font-size: 1.5rem;
+}
+summary h2 {
+  margin: 0;
+}
+details[open] {
+  border-top: 2px solid black;
+  border-bottom: 3px solid black;
+  padding-bottom: 4rem;
+}
+details[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.text {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.photos {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  margin: -0.25rem -0.25rem 2rem -0.25rem;
+}
+.photos li {
+  margin: 0.25rem;
+}
+.photos a,
+.photos img {
+  display: block;
+}
+
+.comments {
+  overflow: auto;
+}
+
+@media (max-width: 40rem) {
+  body {
+    margin: 1rem;
+  }
+
+  .users {
+    margin-left: 0;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+}

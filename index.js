@@ -19,6 +19,8 @@ if (!DIR.includes(__dirname)) {
 }
 
 (async function main() {
+  let browser;
+
   try {
     let meta, waypoints, photos;
 
@@ -29,7 +31,9 @@ if (!DIR.includes(__dirname)) {
 
       fsExtra.ensureDirSync(DIR);
 
-      const browser = await puppeteer.launch();
+      // Start puppeteer
+      browser = await puppeteer.launch();
+
       const page = await browser.newPage();
 
       if (debug) {
@@ -47,9 +51,14 @@ if (!DIR.includes(__dirname)) {
         height: 900, // Map height
       });
 
-      await page.goto(`https://www.mahangu.com/en/trip/${trip}`, {
+      const url = `https://www.mahangu.com/en/trip/${trip}`;
+      const response = await page.goto(url, {
         waitUntil: "networkidle2",
       });
+
+      if (response.status() >= 400) {
+        throw new Error(`Trip not found on ${url}`);
+      }
 
       // Meta data
       meta = await saveMeta({ page, directory: DIR });
@@ -83,5 +92,9 @@ if (!DIR.includes(__dirname)) {
     await saveHtml({ meta, waypoints, photos, directory: DIR });
   } catch (err) {
     console.error(err);
+
+    if (browser) {
+      await browser.close();
+    }
   }
 })();

@@ -1,6 +1,6 @@
-const fs = require("fs");
+const path = require("path");
+const fsExtra = require("fs-extra");
 const puppeteer = require("puppeteer");
-const del = require("del");
 const minimist = require("minimist");
 
 const { saveMeta } = require("./lib/meta");
@@ -11,7 +11,12 @@ const { saveHtml } = require("./lib/html");
 
 const { trip, debug, clean, skipDownloads } = minimist(process.argv.slice(2));
 
-const DIR = "build";
+const DIR = path.resolve(`./build/${trip}/`);
+
+// Prevent path traversal
+if (!DIR.includes(__dirname)) {
+  throw new Error("Nice try");
+}
 
 (async function main() {
   try {
@@ -19,12 +24,10 @@ const DIR = "build";
 
     if (!skipDownloads) {
       if (clean) {
-        await del(DIR);
+        fsExtra.removeSync(DIR);
       }
 
-      if (!fs.existsSync(DIR)) {
-        fs.mkdirSync(DIR);
-      }
+      fsExtra.ensureDirSync(DIR);
 
       const browser = await puppeteer.launch();
       const page = await browser.newPage();

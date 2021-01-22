@@ -9,7 +9,9 @@ const { saveScreenshots } = require("./lib/screenshots");
 const { savePhotos } = require("./lib/photos");
 const { saveHtml } = require("./lib/html");
 
-const { trip, debug, clean, skipDownloads } = minimist(process.argv.slice(2));
+const { trip, secret, debug, clean, skipDownloads } = minimist(
+  process.argv.slice(2)
+);
 
 const DIR = path.resolve(`./build/${trip}/`);
 
@@ -22,7 +24,7 @@ if (!DIR.includes(__dirname)) {
   let browser;
 
   try {
-    let meta, waypoints, photos;
+    let meta, waypoints, photos, nodeFetchOptions;
 
     if (!skipDownloads) {
       if (clean) {
@@ -51,7 +53,9 @@ if (!DIR.includes(__dirname)) {
         height: 900, // Map height
       });
 
-      const url = `https://www.mahangu.com/en/trip/${trip}`;
+      const url = `https://www.mahangu.com/en/trip/${trip}${
+        secret ? `?access=${secret}` : ""
+      }`;
       const response = await page.goto(url, {
         waitUntil: "networkidle2",
       });
@@ -60,17 +64,47 @@ if (!DIR.includes(__dirname)) {
         throw new Error(`Trip not found on ${url}`);
       }
 
+      const isPrivate = await page.$eval(
+        "h2",
+        (el) => el.innerText === "Holy Tabula Rasa!"
+      );
+
+      if (isPrivate) {
+        throw new Error(
+          `Trip is private. Please add "--secret SECRET_ACCESS_CODE"`
+        );
+      }
+
+      // Extract session cookie for private trips
+      if (secret) {
+        const cookies = await page.cookies();
+        const sessionCookie = cookies.find(
+          (cookie) => cookie.name === "PHPSESSID"
+        );
+
+        nodeFetchOptions = {
+          headers: {
+            cookie: `${sessionCookie.name}=${sessionCookie.value}`,
+          },
+        };
+      }
+
       // Meta data
       meta = await saveMeta({ page, directory: DIR });
 
       // Waypoints
-      waypoints = await saveWaypoints({ page, directory: DIR });
+      waypoints = await saveWaypoints({
+        page,
+        directory: DIR,
+        nodeFetchOptions,
+      });
 
       // Photos
       photos = await savePhotos({
         directory: `${DIR}/photos`,
         waypoints,
         trip,
+        nodeFetchOptions,
       });
 
       // Screenshots of specific UI elements

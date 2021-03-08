@@ -1,4 +1,6 @@
 import A11yDialog from "a11y-dialog";
+import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
+import "swiped-events";
 import "./a11y-dialog.css";
 import "./gallery.css";
 
@@ -20,6 +22,14 @@ class Gallery {
 
     // Init dialog
     this.dialog = new A11yDialog(this.dialogContainer);
+
+    this.dialog
+      .on("show", () => {
+        disableBodyScroll(this.dialogContainer);
+      })
+      .on("hide", () => {
+        enableBodyScroll(this.dialogContainer);
+      });
 
     // Extract photos
     this.photos = [].map.call(
@@ -93,6 +103,14 @@ class Gallery {
         false
       );
     }
+
+    // Swipe
+    this.content.addEventListener("swiped-right", () => {
+      this.prev();
+    });
+    this.content.addEventListener("swiped-left", () => {
+      this.next();
+    });
   }
 
   show(index) {

@@ -7,13 +7,14 @@
 .gallery,
 .gallery img {
   max-width: 90vw;
-  max-height: 80vh;
+  max-height: 75vh;
 }
 
 .gallery img {
   display: block;
   width: auto;
   height: auto;
+  align-self: center;
 }
 
 .gallery button {
@@ -23,6 +24,8 @@
   color: inherit;
   font: inherit;
   font-size: 1.5rem;
+  line-height: 1;
+  padding: 0.5rem;
 }
 .gallery button:focus:not(:focus-visible) {
   outline: 0;

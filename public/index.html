@@ -3,7 +3,7 @@
   <head>
     <title><%= meta.title %></title>
     <meta name="viewport" content="width=device-width" />
-    <link rel="stylesheet" href="assets/styles.css" />
+    <link rel="stylesheet" href="assets/index.css" />
   </head>
   <body>
     <div class="wrapper">
@@ -60,5 +60,29 @@
         <% }); %>
       </div>
     </div>
+
+    <div
+      id="dialog"
+      aria-labelledby="dialog-title"
+      aria-hidden="true"
+      class="dialog-container"
+    >
+      <div class="dialog-overlay"></div>
+      <div role="document" class="dialog-content gallery">
+        <button type="button" data-a11y-dialog-hide aria-label="Close dialog">
+          &times;
+        </button>
+        <h1 id="dialog-title" data-gallery-title></h1>
+        <div data-gallery-content></div>
+        <button type="button" data-gallery-prev aria-label="Previous photo">
+          ▸
+        </button>
+        <button type="button" data-gallery-next aria-label="Next photo">
+          ▸
+        </button>
+      </div>
+    </div>
+
+    <script src="assets/index.js"></script>
   </body>
 </html>

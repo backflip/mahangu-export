@@ -11,3 +11,10 @@ Requires Node.js, tested on v14.
 ## Run
 
 `npm run export -- --trip ID`
+
+Optional flags:
+
+- `--secret`: Access code
+- `--debug`: Log stuff
+- `--clean`: Delete `./build`
+- `--skipDownloads`: Use pre-downloaded JSON files
